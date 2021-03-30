@@ -26,4 +26,20 @@ object Utils {
 
         return fullNamePair
     }
+
+    fun toInitials(firstName: String?, lastName: String?): String? {
+        var initials: String? = ""
+        if ((firstName == null || firstName == "null") && (lastName == null || lastName == "null")) {
+            initials = null
+        } else if (firstName == " " && lastName == "") {
+            initials = null
+        } else if ((firstName != null || firstName != "null") && (lastName == null || lastName == "null")) {
+            initials = firstName!![0].toUpperCase().toString()
+        } else if ((firstName == null || firstName == "null") && (lastName != null || lastName != "null")) {
+            initials = lastName!![0].toUpperCase().toString()
+        } else if (firstName?.isNotEmpty()!! && lastName?.isNotEmpty()!!) {
+            initials = "${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}"
+        }
+        return initials
+    }
 }
