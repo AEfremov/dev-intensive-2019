@@ -21,16 +21,10 @@ data class User(
         avatar = null
     )
 
-    constructor(id: String) : this(
-        id,
-        "John",
-        "Doe"
-    )
-
     init {
-        println("==>\n" +
-                "${if (lastName == "Doe") "His name id $firstName $lastName" else "And his name is $firstName $lastName!!!"}\n"
-        )
+//        println("==>\n" +
+//                "${if (lastName == "Doe") "His name id $firstName $lastName" else "And his name is $firstName $lastName!!!"}\n"
+//        )
     }
 
     companion object Factory {
@@ -45,26 +39,4 @@ data class User(
             return User(id = "$lastId", firstName = "$firstName", lastName = "$lastName")
         }
     }
-
-
-
-//    private fun getIntro() = """
-//        sdfsfsfsdfs!!!
-//        sdfsfsdfs sdfs sdghjghm!!!
-//
-//        $firstName $lastName
-//        ${"\n\n\n"}
-//    """.trimIndent()
-//
-//    fun printMe() =
-//        println("""
-//            id: $id,
-//            firstName: $firstName,
-//            lastName: $lastName,
-//            avatar: $avatar,
-//            rating: $rating,
-//            respect: $respect,
-//            lastVisit: $lastVisit,
-//            isOnline: $isOnline
-//        """.trimIndent())
 }
