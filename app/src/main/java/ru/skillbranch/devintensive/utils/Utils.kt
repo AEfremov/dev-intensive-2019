@@ -45,59 +45,60 @@ object Utils {
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
-        val sb: StringBuilder = StringBuilder()
-        var payloadDivider = ""
+        val map = fillTranslitMap()
+        val builder = StringBuilder()
 
-        payload.toLowerCase().asSequence().forEachIndexed { index, c ->
-            when (c) {
-                'а' -> sb.append("a")
-                'б' -> sb.append("b")
-                'в' -> sb.append("v")
-                'г' -> sb.append("g")
-                'д' -> sb.append("d")
-                'е' -> sb.append("e")
-                'ё' -> sb.append("e")
-                'ж' -> sb.append("zh")
-                'з' -> sb.append("z")
-                'и' -> sb.append("i")
-                'й' -> sb.append("i")
-                'к' -> sb.append("k")
-                'л' -> sb.append("l")
-                'м' -> sb.append("m")
-                'н' -> sb.append("n")
-                'о' -> sb.append("o")
-                'п' -> sb.append("p")
-                'р' -> sb.append("r")
-                'с' -> sb.append("s")
-                'т' -> sb.append("t")
-                'у' -> sb.append("u")
-                'ф' -> sb.append("f")
-                'х' -> sb.append("h")
-                'ц' -> sb.append("c")
-                'ч' -> sb.append("ch")
-                'ш' -> sb.append("sh")
-                'щ' -> sb.append("sh")
-                'ъ' -> sb.append("")
-                'ы' -> sb.append("i")
-                'ь' -> sb.append("")
-                'э' -> sb.append("e")
-                'ю' -> sb.append("yu")
-                'я' -> sb.append("ya")
-                ' ' -> {
-                    sb.append(" ")
-                    payloadDivider = " "
-                }
-                '_' -> {
-                    sb.append("_")
-                    payloadDivider = "_"
-                }
-                else -> {
-                    sb.append(c)
-                }
-            }
-        }
+        for (char in payload.trim())
+            builder.append(getTranslChar(char, map))
 
-        return sb.toString().split(payloadDivider).map { it.capitalize() }.joinToString(divider)
+        return builder.toString().replace(" ", divider)
+    }
+
+    private fun getTranslChar(char: Char, map: HashMap<Char, String>): String {
+        val transl = map[char.toLowerCase()] ?: char.toString()
+
+        return if (char.isUpperCase() && transl.isNotEmpty())
+            transl.capitalize()
+        else transl
+    }
+
+    private fun fillTranslitMap(): HashMap<Char, String> {
+        val map = hashMapOf<Char, String>()
+        map['а'] = "a"
+        map['б'] = "b"
+        map['в'] = "v"
+        map['г'] = "g"
+        map['д'] = "d"
+        map['е'] = "e"
+        map['ё'] = "e"
+        map['ж'] = "zh"
+        map['з'] = "z"
+        map['и'] = "i"
+        map['й'] = "i"
+        map['к'] = "k"
+        map['л'] = "l"
+        map['м'] = "m"
+        map['н'] = "n"
+        map['о'] = "o"
+        map['п'] = "p"
+        map['р'] = "r"
+        map['с'] = "s"
+        map['т'] = "t"
+        map['у'] = "u"
+        map['ф'] = "f"
+        map['х'] = "h"
+        map['ц'] = "c"
+        map['ч'] = "ch"
+        map['ш'] = "sh"
+        map['щ'] = "sh'"
+        map['ъ'] = ""
+        map['ы'] = "i"
+        map['ь'] = ""
+        map['э'] = "e"
+        map['ю'] = "yu"
+        map['я'] = "ya"
+
+        return map
     }
 }
 
