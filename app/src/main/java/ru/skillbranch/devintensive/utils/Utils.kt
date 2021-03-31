@@ -1,5 +1,4 @@
 package ru.skillbranch.devintensive.utils
-
 object Utils {
 
     fun parseFullName(fullName: String?) : Pair<String?, String?> {
@@ -44,4 +43,61 @@ object Utils {
 
         return initials
     }
+
+    fun transliteration(payload: String, divider: String = " "): String {
+        val sb: StringBuilder = StringBuilder()
+        var payloadDivider = ""
+
+        payload.toLowerCase().asSequence().forEachIndexed { index, c ->
+            when (c) {
+                'а' -> sb.append("a")
+                'б' -> sb.append("b")
+                'в' -> sb.append("v")
+                'г' -> sb.append("g")
+                'д' -> sb.append("d")
+                'е' -> sb.append("e")
+                'ё' -> sb.append("e")
+                'ж' -> sb.append("zh")
+                'з' -> sb.append("z")
+                'и' -> sb.append("i")
+                'й' -> sb.append("i")
+                'к' -> sb.append("k")
+                'л' -> sb.append("l")
+                'м' -> sb.append("m")
+                'н' -> sb.append("n")
+                'о' -> sb.append("o")
+                'п' -> sb.append("p")
+                'р' -> sb.append("r")
+                'с' -> sb.append("s")
+                'т' -> sb.append("t")
+                'у' -> sb.append("u")
+                'ф' -> sb.append("f")
+                'х' -> sb.append("h")
+                'ц' -> sb.append("c")
+                'ч' -> sb.append("ch")
+                'ш' -> sb.append("sh")
+                'щ' -> sb.append("sh")
+                'ъ' -> sb.append("")
+                'ы' -> sb.append("i")
+                'ь' -> sb.append("")
+                'э' -> sb.append("e")
+                'ю' -> sb.append("yu")
+                'я' -> sb.append("ya")
+                ' ' -> {
+                    sb.append(" ")
+                    payloadDivider = " "
+                }
+                '_' -> {
+                    sb.append("_")
+                    payloadDivider = "_"
+                }
+                else -> {
+                    sb.append(c)
+                }
+            }
+        }
+
+        return sb.toString().split(payloadDivider).map { it.capitalize() }.joinToString(divider)
+    }
 }
+
