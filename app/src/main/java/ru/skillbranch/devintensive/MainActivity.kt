@@ -4,12 +4,15 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.skillbranch.devintensive.extensions.hideKeyboard
 import ru.skillbranch.devintensive.models.Bender
 
 const val STATUS = "STATUS"
@@ -34,28 +37,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         messageEt = et_message
         sendBtn = iv_send
 
+        messageEt.setRawInputType(InputType.TYPE_CLASS_TEXT)
+        messageEt.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                this@MainActivity.hideKeyboard()
+                sendBtn.performClick()
+            }
+            false
+        }
+
         val status = savedInstanceState?.getString(STATUS) ?: Bender.Status.NORMAL.name
         val question = savedInstanceState?.getString(QUESTION) ?: Bender.Question.NAME.name
         benderObj = Bender(Bender.Status.valueOf(status), Bender.Question.valueOf(question))
         Log.d("M_MainActivity", "onCreate $status $question")
-
         val messageText = savedInstanceState?.getString(MESSAGE_TEXT) ?: ""
         messageEt.setText(messageText)
 
         val (r, g, b) = benderObj.status.color
         benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
-
         textTxt.text = benderObj.askQuestion()
         sendBtn.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.iv_send) {
-            val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString().toLowerCase())
-            messageEt.setText("")
-            val (r, g, b) = color
-            benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
-            textTxt.text = phrase
+//            if (messageEt.text.toString().isNotEmpty()) {
+                val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString().toLowerCase())
+                messageEt.setText("")
+                val (r, g, b) = color
+                benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
+                textTxt.text = phrase
+//            }
         }
     }
 
