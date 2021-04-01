@@ -12,6 +12,10 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.skillbranch.devintensive.models.Bender
 
+const val STATUS = "STATUS"
+const val QUESTION = "QUESTION"
+const val MESSAGE_TEXT = "MESSAGE_TEXT"
+
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var benderImage: ImageView
@@ -30,17 +34,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         messageEt = et_message
         sendBtn = iv_send
 
-        val status = savedInstanceState?.getString("STATUS") ?: Bender.Status.NORMAL.name
-        val question = savedInstanceState?.getString("QUESTION") ?: Bender.Question.NAME.name
+        val status = savedInstanceState?.getString(STATUS) ?: Bender.Status.NORMAL.name
+        val question = savedInstanceState?.getString(QUESTION) ?: Bender.Question.NAME.name
         benderObj = Bender(Bender.Status.valueOf(status), Bender.Question.valueOf(question))
-
         Log.d("M_MainActivity", "onCreate $status $question")
+
+        val messageText = savedInstanceState?.getString(MESSAGE_TEXT) ?: ""
+        messageEt.setText(messageText)
 
         val (r, g, b) = benderObj.status.color
         benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
 
         textTxt.text = benderObj.askQuestion()
-
         sendBtn.setOnClickListener(this)
     }
 
@@ -87,8 +92,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString("STATUS", benderObj.status.name)
-        outState.putString("QUESTION", benderObj.question.name)
+        outState.putString(STATUS, benderObj.status.name)
+        outState.putString(QUESTION, benderObj.question.name)
+        outState.putString(MESSAGE_TEXT, messageEt.text.toString())
 
         Log.d("M_MainActivity", "${benderObj.status.name} : ${benderObj.question.name} ")
     }
