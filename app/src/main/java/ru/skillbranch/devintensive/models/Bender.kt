@@ -6,26 +6,54 @@ class Bender(
 ) {
 
 
-    fun askQuestion(): String = when (question) {
-        Question.NAME -> Question.NAME.question
-        Question.PROFESSION -> Question.PROFESSION.question
-        Question.MATERIAL -> Question.MATERIAL.question
-        Question.BDAY -> Question.BDAY.question
-        Question.SERIAL -> Question.SERIAL.question
-        Question.IDLE -> Question.IDLE.question
-    }
+//    fun askQuestion(): String = when (question) {
+//        Question.NAME -> Question.NAME.question
+//        Question.PROFESSION -> Question.PROFESSION.question
+//        Question.MATERIAL -> Question.MATERIAL.question
+//        Question.BDAY -> Question.BDAY.question
+//        Question.SERIAL -> Question.SERIAL.question
+//        Question.IDLE -> Question.IDLE.question
+//    }
 
-    fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
-        return if (question.answers.contains(answer)) {
-            question = question.nextQuestion()
-            "Отлично - ты справился\n${question.question}" to status.color
-        } else {
-            status = status.nextStatus()
-            "Это неправильный ответ\n${question.question}" to status.color
+    fun askQuestion(): String = question.question
+
+//    fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
+//        return if (question.answers.contains(answer)) {
+//            question = question.nextQuestion()
+//            "Отлично - ты справился\n${question.question}" to status.color
+//        } else {
+//            status = status.nextStatus()
+//            "Это неправильный ответ\n${question.question}" to status.color
+//        }
+//    }
+
+    fun listenAnswer(answer:String):Pair<String, Triple<Int, Int, Int>> {
+        return when(question) {
+            Question.IDLE -> question.question to status.color
+            else -> "${checkAnswer(answer)}\n${question.question}" to status.color
         }
     }
 
+    private fun checkAnswer(answer: String): String {
+        return if (question.answers.contains(answer)) {
+            question = question.nextQuestion()
+            "Отлично - ты справился"
+        }
+        else {
+            if (status == Status.CRITICAL) {
+                resetStates()
+                "Это неправильный ответ. Давай все по новой"
+            } else {
+                status = status.nextStatus()
+                "Это неправильный ответ"
+            }
+        }
+    }
 
+    private fun resetStates() {
+        status = Status.NORMAL
+        question = Question.NAME
+    }
 
     enum class Status(val color: Triple<Int, Int, Int>) {
         NORMAL(Triple(255, 255, 255)),

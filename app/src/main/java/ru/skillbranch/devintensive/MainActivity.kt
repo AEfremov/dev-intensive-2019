@@ -32,13 +32,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         messageEt = et_message
         sendBtn = iv_send
 
-        messageEt.setRawInputType(InputType.TYPE_CLASS_TEXT)
-        messageEt.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                sendBtn.performClick()
-            }
-            false
-        }
+//        messageEt.setRawInputType(InputType.TYPE_CLASS_TEXT)
+//        messageEt.setOnEditorActionListener { v, actionId, event ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                sendBtn.performClick()
+//            }
+//            false
+//        }
 
         val status = savedInstanceState?.getString("STATUS") ?: Bender.Status.NORMAL.name
         val question = savedInstanceState?.getString("QUESTION") ?: Bender.Question.NAME.name
